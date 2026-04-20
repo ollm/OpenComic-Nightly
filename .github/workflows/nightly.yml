@@ -89,37 +89,49 @@ jobs:
           - os: windows-latest
             variant: win-x64
             build: npm run build-win
-            extraDeps: npm install --cpu=arm64 --os=win32 sharp
+            extraDeps: |
+              npm install --cpu=x64 --os=win32 sharp
+              npm install --cpu=arm64 --os=win32 sharp
             ext: exe
 
           - os: windows-latest
             variant: win-arm64
             build: npm run build-win-arm
-            extraDeps: npm install --cpu=arm64 --os=win32 sharp
+            extraDeps: |
+              npm install --cpu=x64 --os=win32 sharp
+              npm install --cpu=arm64 --os=win32 sharp
             ext: exe
 
           - os: ubuntu-latest
             variant: linux-x64
             build: npm run build-appimage
-            extraDeps: npm install --cpu=arm64 --os=linux --libc=glibc sharp
+            extraDeps: |
+              npm install --cpu=x64 --os=linux --libc=glibc sharp
+              npm install --cpu=arm64 --os=linux --libc=glibc sharp
             ext: AppImage
 
           - os: ubuntu-latest
             variant: linux-arm64
             build: npm run build-appimage-arm
-            extraDeps: npm install --cpu=arm64 --os=linux --libc=glibc sharp
+            extraDeps: |
+              npm install --cpu=x64 --os=linux --libc=glibc sharp
+              npm install --cpu=arm64 --os=linux --libc=glibc sharp
             ext: AppImage
 
           - os: macos-latest
             variant: mac-x64
             build: npm run build-mac-dmg-nightly
-            extraDeps: npm install --cpu=x64 --os=darwin sharp
+            extraDeps: |
+              npm install --cpu=x64 --os=darwin sharp
+              npm install --cpu=arm64 --os=darwin sharp
             ext: dmg
 
           - os: macos-latest
             variant: mac-arm64
             build: npm run build-mac-dmg-nightly-arm
-            extraDeps: npm install --cpu=x64 --os=darwin sharp
+            extraDeps: |
+              npm install --cpu=x64 --os=darwin sharp
+              npm install --cpu=arm64 --os=darwin sharp
             ext: dmg
 
     runs-on: ${{ matrix.os }}
