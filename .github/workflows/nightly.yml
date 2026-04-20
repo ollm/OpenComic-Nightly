@@ -106,16 +106,16 @@ jobs:
             variant: linux-x64
             build: npm run build-appimage
             extraDeps: |
-              npm install --cpu=x64 --os=linux --libc=glibc sharp
-              npm install --cpu=arm64 --os=linux --libc=glibc sharp
+              npm install @img/sharp-libvips-linuxmusl-x64 @img/sharp-libvips-linux-x64 @img/sharp-linuxmusl-x64 @img/sharp-linux-x64
+              npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64
             ext: AppImage
 
           - os: ubuntu-latest
             variant: linux-arm64
             build: npm run build-appimage-arm
             extraDeps: |
-              npm install --cpu=x64 --os=linux --libc=glibc sharp
-              npm install --cpu=arm64 --os=linux --libc=glibc sharp
+              npm install @img/sharp-libvips-linuxmusl-x64 @img/sharp-libvips-linux-x64 @img/sharp-linuxmusl-x64 @img/sharp-linux-x64
+              npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64
             ext: AppImage
 
           - os: macos-latest
