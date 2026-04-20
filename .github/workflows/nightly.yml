@@ -167,13 +167,11 @@ jobs:
         working-directory: source
         run: node scripts/zstd-copy-native.js
 
-      - name: LS sharp node_modules
-        working-directory: source
-        run: ls -laR node_modules/@img
-
       - name: Build
         working-directory: source
         run: ${{ matrix.build }}
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: Collect & rename artifacts
         shell: bash
