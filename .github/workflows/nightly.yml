@@ -40,7 +40,6 @@ jobs:
           echo "tag=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "source_sha=${SHA}" >> "$GITHUB_OUTPUT"
 
-      # Checkout del repo Nightly (este repo) para poder leer tags existentes
       - name: Checkout nightly repo (for last-tag check)
         uses: actions/checkout@v4
         with:
@@ -90,26 +89,37 @@ jobs:
           - os: windows-latest
             variant: win-x64
             build: npm run build-win
+            extraDeps: npm install --cpu=arm64 --os=win32 sharp
             ext: exe
 
           - os: windows-latest
             variant: win-arm64
             build: npm run build-win-arm
+            extraDeps: npm install --cpu=arm64 --os=win32 sharp
             ext: exe
 
           - os: ubuntu-latest
             variant: linux-x64
             build: npm run build-appimage
+            extraDeps: npm install --cpu=arm64 --os=linux --libc=glibc sharp
             ext: AppImage
 
           - os: ubuntu-latest
             variant: linux-arm64
             build: npm run build-appimage-arm
+            extraDeps: npm install --cpu=arm64 --os=linux --libc=glibc sharp
             ext: AppImage
 
           - os: macos-latest
-            variant: mac
-            build: npm run build-mac-dmg
+            variant: mac-x64
+            build: npm run build-mac-dmg-nightly
+            extraDeps: npm install --cpu=x64 --os=darwin sharp
+            ext: dmg
+
+          - os: macos-latest
+            variant: mac-arm64
+            build: npm run build-mac-dmg-nightly-arm
+            extraDeps: npm install --cpu=x64 --os=darwin sharp
             ext: dmg
 
     runs-on: ${{ matrix.os }}
@@ -126,13 +136,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: source/package-lock.json
 
       - name: Install deps
         working-directory: source
         run: npm ci
+
+      - name: Install extra deps for sharp
+        working-directory: source
+        run: ${{ matrix.extraDeps }}
 
       - name: Build
         working-directory: source
