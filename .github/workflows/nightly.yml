@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout source repo (OpenComic)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ollm/OpenComic
           ref: master
@@ -41,7 +41,7 @@ jobs:
           echo "source_sha=${SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout nightly repo (for last-tag check)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -126,7 +126,7 @@ jobs:
 
     steps:
       - name: Checkout source repo (OpenComic)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ollm/OpenComic
           ref: master
@@ -134,7 +134,7 @@ jobs:
           fetch-depth: 1
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
@@ -170,7 +170,7 @@ jobs:
           ls -la release || true
 
       - name: Upload artifact (temporary between jobs)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-${{ matrix.variant }}
           path: release/*
@@ -186,7 +186,7 @@ jobs:
 
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: release
 
@@ -199,7 +199,7 @@ jobs:
           ls -la final || true
 
       - name: Create Release (in this repo)
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.prepare.outputs.tag }}
           name: Nightly ${{ needs.prepare.outputs.tag }}
