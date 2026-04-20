@@ -153,6 +153,10 @@ jobs:
         working-directory: source
         run: ${{ matrix.extraDeps }}
 
+      - name: List all files recursively
+        run: ls -R
+        working-directory: source/build
+
       - name: Build
         working-directory: source
         run: ${{ matrix.build }}
