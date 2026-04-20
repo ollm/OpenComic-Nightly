@@ -90,16 +90,14 @@ jobs:
             variant: win-x64
             build: npm run build-win
             extraDeps: |
-              npm install --cpu=x64 --os=win32 sharp
-              npm install --cpu=arm64 --os=win32 sharp
+              npm install @img/sharp-win32-arm64 @img/sharp-win32-x64 --force
             ext: exe
 
           - os: windows-latest
             variant: win-arm64
             build: npm run build-win-arm
             extraDeps: |
-              npm install --cpu=x64 --os=win32 sharp
-              npm install --cpu=arm64 --os=win32 sharp
+              npm install @img/sharp-win32-arm64 @img/sharp-win32-x64 --force
             ext: exe
 
           - os: ubuntu-latest
@@ -122,16 +120,16 @@ jobs:
             variant: mac-x64
             build: npm run build-mac-dmg-nightly
             extraDeps: |
-              npm install --cpu=x64 --os=darwin sharp
-              npm install --cpu=arm64 --os=darwin sharp
+              npm install @img/sharp-darwin-x64 @img/sharp-libvips-darwin-x64 --force
+              npm install @img/sharp-darwin-arm64 @img/sharp-libvips-darwin-arm64 --force
             ext: dmg
 
           - os: macos-latest
             variant: mac-arm64
             build: npm run build-mac-dmg-nightly-arm
             extraDeps: |
-              npm install --cpu=x64 --os=darwin sharp
-              npm install --cpu=arm64 --os=darwin sharp
+              npm install @img/sharp-darwin-x64 @img/sharp-libvips-darwin-x64 --force
+              npm install @img/sharp-darwin-arm64 @img/sharp-libvips-darwin-arm64 --force
             ext: dmg
 
     runs-on: ${{ matrix.os }}
