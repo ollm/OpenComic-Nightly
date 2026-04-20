@@ -1,0 +1,218 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: nightly
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
+      tag: ${{ steps.ver.outputs.tag }}
+      source_sha: ${{ steps.ver.outputs.source_sha }}
+      should_build: ${{ steps.check.outputs.should_build }}
+      last_tag: ${{ steps.check.outputs.last_tag }}
+      last_sha: ${{ steps.check.outputs.last_sha }}
+
+    steps:
+      - name: Checkout source repo (OpenComic)
+        uses: actions/checkout@v4
+        with:
+          repository: ollm/OpenComic
+          ref: master
+          path: source
+          fetch-depth: 1
+
+      - name: Compute version/tag from source SHA
+        id: ver
+        shell: bash
+        run: |
+          DATE="$(date -u +'%Y%m%d')"
+          SHA="$(git -C source rev-parse --short=7 HEAD)"
+          VERSION="nightly-${DATE}-${SHA}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "source_sha=${SHA}" >> "$GITHUB_OUTPUT"
+
+      # Checkout del repo Nightly (este repo) para poder leer tags existentes
+      - name: Checkout nightly repo (for last-tag check)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Skip if source SHA is same as latest nightly
+        id: check
+        shell: bash
+        run: |
+          CURRENT_SHA="${{ steps.ver.outputs.source_sha }}"
+
+          git fetch --tags --force
+
+          LAST_TAG="$(git tag -l 'nightly-*' --sort=-creatordate | head -n 1 || true)"
+          if [ -z "$LAST_TAG" ]; then
+            echo "No previous nightly tag found. Will build."
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "last_tag=" >> "$GITHUB_OUTPUT"
+            echo "last_sha=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          LAST_SHA="${LAST_TAG##*-}"
+
+          echo "Latest nightly tag: $LAST_TAG"
+          echo "Latest nightly sha: $LAST_SHA"
+          echo "Current source sha: $CURRENT_SHA"
+
+          echo "last_tag=$LAST_TAG" >> "$GITHUB_OUTPUT"
+          echo "last_sha=$LAST_SHA" >> "$GITHUB_OUTPUT"
+
+          if [ "$LAST_SHA" = "$CURRENT_SHA" ]; then
+            echo "Source SHA unchanged since last nightly. Skipping build."
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Source SHA changed. Will build."
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: prepare
+    if: needs.prepare.outputs.should_build == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            variant: win-x64
+            build: npm run build-win
+            ext: exe
+
+          - os: windows-latest
+            variant: win-arm64
+            build: npm run build-win-arm
+            ext: exe
+
+          - os: ubuntu-latest
+            variant: linux-x64
+            build: npm run build-appimage
+            ext: AppImage
+
+          - os: ubuntu-latest
+            variant: linux-arm64
+            build: npm run build-appimage-arm
+            ext: AppImage
+
+          - os: macos-latest
+            variant: mac
+            build: npm run build-mac-dmg
+            ext: dmg
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout source repo (OpenComic)
+        uses: actions/checkout@v4
+        with:
+          repository: ollm/OpenComic
+          ref: master
+          path: source
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+
+      - name: Install deps
+        working-directory: source
+        run: npm ci
+
+      - name: Build
+        working-directory: source
+        run: ${{ matrix.build }}
+
+      - name: Collect & rename artifacts
+        shell: bash
+        run: |
+          VERSION="${{ needs.prepare.outputs.version }}"
+          VARIANT="${{ matrix.variant }}"
+          mkdir -p release
+
+          find source -type f -name "*.${{ matrix.ext }}" | while read -r file; do
+            base="$(basename "$file")"
+            newname="OpenComic-${VERSION}-${VARIANT}-${base}"
+            cp "$file" "release/$newname"
+          done
+
+          echo "Artifacts collected:"
+          ls -la release || true
+
+      - name: Upload artifact (temporary between jobs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.variant }}
+          path: release/*
+          retention-days: 1
+
+  release:
+    needs: [prepare, build]
+    if: needs.prepare.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release
+
+      - name: Flatten files
+        shell: bash
+        run: |
+          mkdir -p final
+          find release -type f -exec cp {} final/ \;
+          echo "Final files:"
+          ls -la final || true
+
+      - name: Create Release (in this repo)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare.outputs.tag }}
+          name: Nightly ${{ needs.prepare.outputs.tag }}
+          body: |
+            Automated nightly build
+
+            Source repo: ollm/OpenComic
+            Source ref: master
+            Source commit: ${{ needs.prepare.outputs.source_sha }}
+          files: final/*
+          prerelease: true
+
+      - name: Delete old releases (keep last 10)
+        uses: dev-drprasad/delete-older-releases@v0.3.3
+        with:
+          keep_latest: 10
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  skip:
+    needs: prepare
+    if: needs.prepare.outputs.should_build != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skipped
+        run: |
+          echo "Nightly build skipped because source SHA didn't change."
+          echo "Latest nightly tag: ${{ needs.prepare.outputs.last_tag }}"
+          echo "Latest nightly sha: ${{ needs.prepare.outputs.last_sha }}"
+          echo "Current source sha: ${{ needs.prepare.outputs.source_sha }}"
