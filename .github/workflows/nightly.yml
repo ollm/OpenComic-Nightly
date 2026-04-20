@@ -142,7 +142,7 @@ jobs:
 
       - name: Install Node Zstd native dependencies
         run: npm install --force
-        working-directory: ./build/node-zstd-native-dependencies
+        working-directory: source/build/node-zstd-native-dependencies
 
       - name: Install deps
         working-directory: source
