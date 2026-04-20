@@ -153,9 +153,9 @@ jobs:
         working-directory: source
         run: ${{ matrix.extraDeps }}
 
-      - name: List all files recursively
-        run: ls -R
-        working-directory: source/build
+      - name: Copy zstd native modules
+        working-directory: source
+        run: node scripts/zstd-copy-native.js
 
       - name: Build
         working-directory: source
