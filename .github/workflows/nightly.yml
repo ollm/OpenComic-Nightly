@@ -19,7 +19,6 @@ jobs:
       should_build: ${{ steps.check.outputs.should_build }}
       last_tag: ${{ steps.check.outputs.last_tag }}
       last_sha: ${{ steps.check.outputs.last_sha }}
-      changelog: ${{ steps.changes.outputs.changelog }}
 
     steps:
       - name: Checkout source repo (OpenComic)
