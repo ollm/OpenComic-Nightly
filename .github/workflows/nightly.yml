@@ -183,6 +183,15 @@ jobs:
         working-directory: source
         run: node scripts/zstd-copy-native.js
 
+      - name: Install Flatpak tooling (Linux Flatpak builds only)
+        if: startsWith(matrix.build, 'npm run build-flatpak')
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder
+          flatpak --version
+          flatpak-builder --version
+
       - name: Build
         working-directory: source
         run: ${{ matrix.build }}
