@@ -202,6 +202,7 @@ jobs:
         run: |
           sudo flatpak install -y --noninteractive flathub \
             org.freedesktop.Platform//24.08 \
+            org.freedesktop.Platform/aarch64/24.08 \
             org.freedesktop.Sdk//24.08 \
             org.electronjs.Electron2.BaseApp//24.08
 
