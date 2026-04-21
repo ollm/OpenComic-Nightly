@@ -189,8 +189,21 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y flatpak flatpak-builder
+
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
           flatpak --version
           flatpak-builder --version
+          flatpak remotes
+
+      - name: Install Flatpak runtime/SDK (Linux Flatpak builds only)
+        if: startsWith(matrix.build, 'npm run build-flatpak')
+        shell: bash
+        run: |
+          sudo flatpak install -y --noninteractive flathub \
+            org.freedesktop.Platform//24.08 \
+            org.freedesktop.Sdk//24.08 \
+            org.electronjs.Electron2.BaseApp//24.08
 
       - name: Build
         working-directory: source
