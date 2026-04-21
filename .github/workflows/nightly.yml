@@ -19,6 +19,7 @@ jobs:
       should_build: ${{ steps.check.outputs.should_build }}
       last_tag: ${{ steps.check.outputs.last_tag }}
       last_sha: ${{ steps.check.outputs.last_sha }}
+      changelog: ${{ steps.changes.outputs.changelog }}
 
     steps:
       - name: Checkout source repo (OpenComic)
@@ -35,7 +36,7 @@ jobs:
         run: |
           DATE="$(date -u +'%Y%m%d')"
           SHA="$(git -C source rev-parse --short=7 HEAD)"
-          VERSION="nightly-${DATE}-${SHA}"
+          VERSION="Nightly-${DATE}-${SHA}"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "tag=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "source_sha=${SHA}" >> "$GITHUB_OUTPUT"
@@ -53,7 +54,7 @@ jobs:
 
           git fetch --tags --force
 
-          LAST_TAG="$(git tag -l 'nightly-*' --sort=-creatordate | head -n 1 || true)"
+          LAST_TAG="$(git tag -l 'Nightly-*' --sort=-creatordate | head -n 1 || true)"
           if [ -z "$LAST_TAG" ]; then
             echo "No previous nightly tag found. Will build."
             echo "should_build=true" >> "$GITHUB_OUTPUT"
@@ -78,6 +79,30 @@ jobs:
             echo "Source SHA changed. Will build."
             echo "should_build=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Build changelog from last nightly to current
+        id: changes
+        if: steps.check.outputs.last_sha != ''
+        shell: bash
+        run: |
+          LAST_SHA="${{ steps.check.outputs.last_sha }}"
+          CURRENT_SHA="${{ steps.ver.outputs.source_sha }}"
+
+          git -C source fetch --no-tags --prune --depth=200 origin master
+
+          echo "Generating changelog: ${LAST_SHA}..HEAD"
+
+          CHANGELOG="$(git -C source log --no-merges --pretty=format:'- %s (%h)' "${LAST_SHA}..HEAD" || true)"
+
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="- (No commits found between ${LAST_SHA} and current HEAD)"
+          fi
+
+          {
+            echo "changelog<<'EOF'"
+            echo "$CHANGELOG"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
   build:
     needs: prepare
@@ -219,7 +244,7 @@ jobs:
           VARIANT="${{ matrix.variant }}"
           mkdir -p release
 
-          find source -type f -name "*.${{ matrix.ext }}" | while read -r file; do
+          find source/dist -maxdepth 1 -type f -name "*.${{ matrix.ext }}" | while read -r file; do
             base="$(basename "$file")"
             newname="OpenComic-${VERSION}-${VARIANT}-${base}"
             cp "$file" "release/$newname"
@@ -265,11 +290,14 @@ jobs:
           body: |
             Automated nightly build
 
-            Source repo: ollm/OpenComic
+            Source repo: [ollm/OpenComic](https://github.com/ollm/OpenComic)
             Source ref: master
-            Source commit: ${{ needs.prepare.outputs.source_sha }}
+            Source commit: https://github.com/ollm/OpenComic/commit/${{ needs.prepare.outputs.source_sha }}
+
+            Changes since last nightly:
+            ${{ needs.prepare.outputs.changelog }}
           files: final/*
-          prerelease: true
+          prerelease: false
 
       - name: Delete old releases (keep last 10)
         uses: dev-drprasad/delete-older-releases@v0.3.3
