@@ -80,28 +80,6 @@ jobs:
             echo "should_build=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build changelog from last nightly to current
-        id: changes
-        if: steps.check.outputs.last_sha != ''
-        shell: bash
-        run: |
-          LAST_SHA="${{ steps.check.outputs.last_sha }}"
-          CURRENT_SHA="${{ steps.ver.outputs.source_sha }}"
-
-          echo "Generating changelog: ${LAST_SHA}..HEAD"
-
-          CHANGELOG="$(git -C source log --no-merges --pretty=format:'- %s (%h)' "${LAST_SHA}..HEAD" || true)"
-
-          if [ -z "$CHANGELOG" ]; then
-            CHANGELOG="- (No commits found between ${LAST_SHA} and current HEAD)"
-          fi
-
-          {
-            echo "changelog<<'EOF'"
-            echo "$CHANGELOG"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-
   build:
     needs: prepare
     if: needs.prepare.outputs.should_build == 'true'
@@ -287,14 +265,14 @@ jobs:
           tag_name: ${{ needs.prepare.outputs.tag }}
           name: ${{ needs.prepare.outputs.tag }}
           body: |
-            Automated nightly build
+            ## Automated Nightly Build
 
-            Source repo: [ollm/OpenComic](https://github.com/ollm/OpenComic)
-            Source ref: master
-            Source commit: https://github.com/ollm/OpenComic/commit/${{ needs.prepare.outputs.source_sha }}
+            **Source Repository:** [ollm/OpenComic](https://github.com/ollm/OpenComic)
+            **Branch:** `master` 
+            **Commit:** https://github.com/ollm/OpenComic/commit/${{ needs.prepare.outputs.source_sha }}
 
-            Changes since last nightly:
-            ${{ needs.prepare.outputs.changelog }}
+            ### Changes Since Last Nightly:
+            https://github.com/ollm/OpenComic/compare/${{ needs.prepare.outputs.last_sha }}...{{ needs.prepare.outputs.source_sha }}
           files: final/*
           prerelease: false
 
