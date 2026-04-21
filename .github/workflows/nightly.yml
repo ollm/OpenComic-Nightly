@@ -124,13 +124,13 @@ jobs:
               npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64 --force
             ext: flatpak
 
-          - os: ubuntu-latest
-            variant: linux-arm64
-            build: npm run build-flatpak-arm
-            extraDeps: |
-              npm install @img/sharp-libvips-linuxmusl-x64 @img/sharp-libvips-linux-x64 @img/sharp-linuxmusl-x64 @img/sharp-linux-x64 --force
-              npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64 --force
-            ext: flatpak
+          # - os: ubuntu-latest
+          #   variant: linux-arm64
+          #   build: npm run build-flatpak-arm
+          #   extraDeps: |
+          #     npm install @img/sharp-libvips-linuxmusl-x64 @img/sharp-libvips-linux-x64 @img/sharp-linuxmusl-x64 @img/sharp-linux-x64 --force
+          #     npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64 --force
+          #   ext: flatpak
 
           # - os: macos-latest
           #   variant: mac-x64
