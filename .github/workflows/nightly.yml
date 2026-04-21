@@ -242,11 +242,12 @@ jobs:
         run: |
           VERSION="${{ needs.prepare.outputs.version }}"
           VARIANT="${{ matrix.variant }}"
+          EXT="${{ matrix.ext }}
           mkdir -p release
 
           find source/dist -maxdepth 1 -type f -name "*.${{ matrix.ext }}" | while read -r file; do
             base="$(basename "$file")"
-            newname="OpenComic-${VERSION}-${VARIANT}-${base}"
+            newname="OpenComic-${VERSION}-${VARIANT}.${EXT}"
             cp "$file" "release/$newname"
           done
 
