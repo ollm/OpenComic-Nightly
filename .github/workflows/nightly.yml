@@ -262,7 +262,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.prepare.outputs.tag }}
-          name: ${{ needs.prepare.outputs.tag }}
+          name: OpenComic-${{ needs.prepare.outputs.tag }}
           body: |
             ## Automated Nightly Build
 
@@ -271,7 +271,7 @@ jobs:
             **Commit:** https://github.com/ollm/OpenComic/commit/${{ needs.prepare.outputs.source_sha }}
 
             ### Changes Since Last Nightly:
-            https://github.com/ollm/OpenComic/compare/${{ needs.prepare.outputs.last_sha }}...{{ needs.prepare.outputs.source_sha }}
+            https://github.com/ollm/OpenComic/compare/${{ needs.prepare.outputs.last_sha }}...${{ needs.prepare.outputs.source_sha }}
           files: final/*
           prerelease: false
 
