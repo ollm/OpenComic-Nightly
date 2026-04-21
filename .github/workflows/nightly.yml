@@ -116,21 +116,37 @@ jobs:
               npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64 --force
             ext: AppImage
 
-          - os: macos-latest
-            variant: mac-x64
-            build: npm run build-mac-dmg-nightly
+          - os: ubuntu-latest
+            variant: linux-x64
+            build: npm run build-flatpak
             extraDeps: |
-              npm install @img/sharp-darwin-x64 @img/sharp-libvips-darwin-x64 --force
-              npm install @img/sharp-darwin-arm64 @img/sharp-libvips-darwin-arm64 --force
-            ext: dmg
+              npm install @img/sharp-libvips-linuxmusl-x64 @img/sharp-libvips-linux-x64 @img/sharp-linuxmusl-x64 @img/sharp-linux-x64 --force
+              npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64 --force
+            ext: flatpak
 
-          - os: macos-latest
-            variant: mac-arm64
-            build: npm run build-mac-dmg-nightly-arm
+          - os: ubuntu-latest
+            variant: linux-arm64
+            build: npm run build-flatpak-arm
             extraDeps: |
-              npm install @img/sharp-darwin-x64 @img/sharp-libvips-darwin-x64 --force
-              npm install @img/sharp-darwin-arm64 @img/sharp-libvips-darwin-arm64 --force
-            ext: dmg
+              npm install @img/sharp-libvips-linuxmusl-x64 @img/sharp-libvips-linux-x64 @img/sharp-linuxmusl-x64 @img/sharp-linux-x64 --force
+              npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64 --force
+            ext: flatpak
+
+          # - os: macos-latest
+          #   variant: mac-x64
+          #   build: npm run build-mac-dmg-nightly
+          #   extraDeps: |
+          #     npm install @img/sharp-darwin-x64 @img/sharp-libvips-darwin-x64 --force
+          #     npm install @img/sharp-darwin-arm64 @img/sharp-libvips-darwin-arm64 --force
+          #   ext: dmg
+
+          # - os: macos-latest
+          #   variant: mac-arm64
+          #   build: npm run build-mac-dmg-nightly-arm
+          #   extraDeps: |
+          #     npm install @img/sharp-darwin-x64 @img/sharp-libvips-darwin-x64 --force
+          #     npm install @img/sharp-darwin-arm64 @img/sharp-libvips-darwin-arm64 --force
+          #   ext: dmg
 
     runs-on: ${{ matrix.os }}
 
