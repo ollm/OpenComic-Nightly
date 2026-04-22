@@ -219,6 +219,7 @@ jobs:
         run: ${{ matrix.build }}
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
+          NIGHTLY: true
 
       - name: Collect & rename artifacts
         shell: bash
