@@ -13,6 +13,7 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
+      app_version: ${{ steps.ver.outputs.app_version }}
       version: ${{ steps.ver.outputs.version }}
       tag: ${{ steps.ver.outputs.tag }}
       source_sha: ${{ steps.ver.outputs.source_sha }}
@@ -29,13 +30,20 @@ jobs:
           path: source
           fetch-depth: 20
 
+      - name: Set App Version
+        id: appver
+        shell: bash
+        run: |
+          APP_VERSION="$(node -p "require('./source/package.json').version")"
+          echo "app_version=${APP_VERSION}" >> "$GITHUB_OUTPUT"
+
       - name: Compute version/tag from source SHA
         id: ver
         shell: bash
         run: |
           DATE="$(date -u +'%Y%m%d')"
           SHA="$(git -C source rev-parse --short=7 HEAD)"
-          VERSION="Nightly-${DATE}-${SHA}"
+          VERSION="Nightly-v${{ needs.prepare.outputs.app_version }}-${SHA}"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "tag=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "source_sha=${SHA}" >> "$GITHUB_OUTPUT"
