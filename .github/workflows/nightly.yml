@@ -98,17 +98,38 @@ jobs:
         include:
           - os: windows-latest
             variant: win-x64
-            build: npm run build-win
+            build: npm run build-nsis
             extraDeps: |
               npm install @img/sharp-win32-arm64 @img/sharp-win32-x64 --force
             ext: exe
 
           - os: windows-latest
             variant: win-arm64
-            build: npm run build-win-arm
+            build: npm run build-nsis-arm
             extraDeps: |
               npm install @img/sharp-win32-arm64 @img/sharp-win32-x64 --force
             ext: exe
+
+          - os: windows-latest
+            variant: win-x64-portable
+            build: npm run build-portable
+            extraDeps: |
+              npm install @img/sharp-win32-arm64 @img/sharp-win32-x64 --force
+            ext: exe
+
+          - os: windows-latest
+            variant: win-arm64-folder-portable
+            build: npm run build-folder-portable
+            extraDeps: |
+              npm install @img/sharp-win32-arm64 @img/sharp-win32-x64 --force
+            ext: exe
+
+          - os: windows-latest
+            variant: win-arm64-folder-portable
+            build: npm run build-folder-portable-7z
+            extraDeps: |
+              npm install @img/sharp-win32-arm64 @img/sharp-win32-x64 --force
+            ext: 7z
 
           - os: ubuntu-latest
             variant: linux-x64
@@ -133,6 +154,14 @@ jobs:
               npm install @img/sharp-libvips-linuxmusl-x64 @img/sharp-libvips-linux-x64 @img/sharp-linuxmusl-x64 @img/sharp-linux-x64 --force
               npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64 --force
             ext: flatpak
+
+          - os: ubuntu-latest
+            variant: linux-x64-folder-portable
+            build: npm run build-linux-folder-portable
+            extraDeps: |
+              npm install @img/sharp-libvips-linuxmusl-x64 @img/sharp-libvips-linux-x64 @img/sharp-linuxmusl-x64 @img/sharp-linux-x64 --force
+              npm install @img/sharp-libvips-linux-arm64 @img/sharp-libvips-linuxmusl-arm64 @img/sharp-linux-arm64 @img/sharp-linuxmusl-arm64 --force
+            ext: 7z
 
           # - os: ubuntu-latest
           #   variant: linux-arm64
