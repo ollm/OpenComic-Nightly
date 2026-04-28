@@ -1,18 +1,29 @@
 # OpenComic Nightly
 
-Welcome to the **OpenComic Nightly** build repository.
+🚧 **Development builds of OpenComic with the latest changes**
 
 ## Overview
 
-This is the nightly build of OpenComic, featuring the latest development changes and experimental features. Nightly builds are updated regularly and may contain unstable code.
+This repository provides **nightly builds** of OpenComic, including the most recent features, improvements, and experimental changes.
 
-## ⚠️ Warning
+These builds are automatically generated from the latest commits and are intended for testing purposes.
 
-Nightly builds are **not recommended for production use**. Use at your own risk.
+> [!WARNING]
+> Nightly builds may be **unstable**, contain bugs, or break existing functionality.
 
-## Getting Started
+## Why use Nightly?
 
-<!-- builds -->
+- Get access to the **latest features** before release
+- Help identify and report bugs early
+- Test performance improvements and experimental changes
+
+## Download
+
+> [!TIP]
+> File names include the version and commit hash for easier tracking.  
+> You can also view the commit inside OpenComic in **About OpenComic**.
+
+<!-- builds-start -->
 
 ###### Windows
 - [.exe](https://github.com/ollm/OpenComic-Nightly/releases/download/Nightly-v1.6.6-3086c41/OpenComic-Nightly-v1.6.6-3086c41-win-x64.exe)
@@ -29,6 +40,18 @@ Nightly builds are **not recommended for production use**. Use at your own risk.
 - [folder.portable.7z](https://github.com/ollm/OpenComic-Nightly/releases/download/Nightly-v1.6.6-3086c41/OpenComic-Nightly-v1.6.6-3086c41-linux-x64-folder-portable.7z)
 
 ###### Linux Arm64
-
 - [arm64.AppImage](https://github.com/ollm/OpenComic-Nightly/releases/download/Nightly-v1.6.6-3086c41/OpenComic-Nightly-v1.6.6-3086c41-linux-arm64.AppImage)
 - [arm64.folder.portable.7z](https://github.com/ollm/OpenComic-Nightly/releases/download/Nightly-v1.6.6-3086c41/OpenComic-Nightly-v1.6.6-3086c41-linux-arm64-folder-portable.7z)
+
+<!-- builds-end -->
+
+## Notes
+
+- Nightly builds are updated frequently, and older builds may be removed.
+- Settings and data compatibility is **not guaranteed**.  
+  If you experience data loss in OpenComic, you can restore an automatic backup by following this [guide](https://opencomic.app/docs/guides/settings/export-and-restore).
+- If you encounter issues, please report them in the main repository.
+
+## Related
+
+- Main repository: [ollm/OpenComic](https://github.com/ollm/OpenComic)
