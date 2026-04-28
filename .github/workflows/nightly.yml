@@ -293,6 +293,11 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout nightly repo (for README update)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - name: Download all artifacts
         uses: actions/download-artifact@v8
         with:
