@@ -323,6 +323,49 @@ jobs:
           files: final/*
           prerelease: false
 
+      - name: Generate README builds block
+        run: |
+          VERSION="${{ needs.prepare.outputs.version }}"
+          BASE_URL="https://github.com/ollm/OpenComic-Nightly/releases/download/${VERSION}"
+
+          cat > builds.md <<EOF
+###### Windows
+- [.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64.exe)
+- [portable.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64-portable.exe)
+- [folder.portable.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64-folder-portable.exe)
+- [folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-win-x64-folder-portable.7z)
+
+###### Windows Arm64
+- [arm64.exe](${BASE_URL}/OpenComic-${VERSION}-win-arm64.exe)
+
+###### Linux
+- [.flatpak](${BASE_URL}/OpenComic-${VERSION}-linux-x64.flatpak)
+- [.AppImage](${BASE_URL}/OpenComic-${VERSION}-linux-x64.AppImage)
+- [folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-linux-x64-folder-portable.7z)
+
+###### Linux Arm64
+- [arm64.AppImage](${BASE_URL}/OpenComic-${VERSION}-linux-arm64.AppImage)
+- [arm64.folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-linux-arm64-folder-portable.7z)
+EOF
+
+      - name: Update README
+        run: |
+          awk '
+            BEGIN { in_block=0 }
+            /<!-- builds-start -->/ { print; system("cat builds.md"); in_block=1; next }
+            /<!-- builds-end -->/   { in_block=0; print; next }
+            !in_block               { print }
+          ' README.md > README.tmp && mv README.tmp README.md
+
+      - name: Commit & push README
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add README.md
+          git commit -m "Update nightly builds (${{ needs.prepare.outputs.version }})" || echo "No changes"
+          git push
+
       - name: Delete old releases (keep last 10)
         uses: dev-drprasad/delete-older-releases@v0.3.3
         with:
