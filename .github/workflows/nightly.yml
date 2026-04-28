@@ -329,24 +329,24 @@ jobs:
           BASE_URL="https://github.com/ollm/OpenComic-Nightly/releases/download/${VERSION}"
 
           cat > builds.md <<EOF
-###### Windows
-- [.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64.exe)
-- [portable.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64-portable.exe)
-- [folder.portable.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64-folder-portable.exe)
-- [folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-win-x64-folder-portable.7z)
+          ###### Windows
+          - [.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64.exe)
+          - [portable.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64-portable.exe)
+          - [folder.portable.exe](${BASE_URL}/OpenComic-${VERSION}-win-x64-folder-portable.exe)
+          - [folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-win-x64-folder-portable.7z)
 
-###### Windows Arm64
-- [arm64.exe](${BASE_URL}/OpenComic-${VERSION}-win-arm64.exe)
+          ###### Windows Arm64
+          - [arm64.exe](${BASE_URL}/OpenComic-${VERSION}-win-arm64.exe)
 
-###### Linux
-- [.flatpak](${BASE_URL}/OpenComic-${VERSION}-linux-x64.flatpak)
-- [.AppImage](${BASE_URL}/OpenComic-${VERSION}-linux-x64.AppImage)
-- [folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-linux-x64-folder-portable.7z)
+          ###### Linux
+          - [.flatpak](${BASE_URL}/OpenComic-${VERSION}-linux-x64.flatpak)
+          - [.AppImage](${BASE_URL}/OpenComic-${VERSION}-linux-x64.AppImage)
+          - [folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-linux-x64-folder-portable.7z)
 
-###### Linux Arm64
-- [arm64.AppImage](${BASE_URL}/OpenComic-${VERSION}-linux-arm64.AppImage)
-- [arm64.folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-linux-arm64-folder-portable.7z)
-EOF
+          ###### Linux Arm64
+          - [arm64.AppImage](${BASE_URL}/OpenComic-${VERSION}-linux-arm64.AppImage)
+          - [arm64.folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-linux-arm64-folder-portable.7z)
+          EOF
 
       - name: Update README
         run: |
