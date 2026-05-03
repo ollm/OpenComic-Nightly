@@ -90,6 +90,7 @@ jobs:
           fi
 
   build:
+    name: ${{ matrix.variant }}-${{ matrix.ext }}
     needs: prepare
     if: needs.prepare.outputs.should_build == 'true'
     strategy:
