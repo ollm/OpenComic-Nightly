@@ -132,6 +132,14 @@ jobs:
 
           - os: ubuntu-latest
             variant: linux-x64
+            build: npm run build-deb
+            extraDeps: |
+              npm install @img-custom/sharp-libvips-linuxmusl-x64 @img-custom/sharp-libvips-linux-x64 @img-custom/sharp-linuxmusl-x64 @img-custom/sharp-linux-x64 --force && node scripts/sharp-copy-custom.js
+              npm install @img-custom/sharp-libvips-linux-arm64 @img-custom/sharp-libvips-linuxmusl-arm64 @img-custom/sharp-linux-arm64 @img-custom/sharp-linuxmusl-arm64 --force && node scripts/sharp-copy-custom.js
+            ext: deb
+
+          - os: ubuntu-latest
+            variant: linux-x64
             build: npm run build-appimage
             extraDeps: |
               npm install @img-custom/sharp-libvips-linuxmusl-x64 @img-custom/sharp-libvips-linux-x64 @img-custom/sharp-linuxmusl-x64 @img-custom/sharp-linux-x64 --force && node scripts/sharp-copy-custom.js
@@ -153,6 +161,14 @@ jobs:
               npm install @img-custom/sharp-libvips-linuxmusl-x64 @img-custom/sharp-libvips-linux-x64 @img-custom/sharp-linuxmusl-x64 @img-custom/sharp-linux-x64 --force && node scripts/sharp-copy-custom.js
               npm install @img-custom/sharp-libvips-linux-arm64 @img-custom/sharp-libvips-linuxmusl-arm64 @img-custom/sharp-linux-arm64 @img-custom/sharp-linuxmusl-arm64 --force && node scripts/sharp-copy-custom.js
             ext: 7z
+
+          - os: ubuntu-latest
+            variant: linux-arm64
+            build: npm run build-deb-arm
+            extraDeps: |
+              npm install @img-custom/sharp-libvips-linuxmusl-x64 @img-custom/sharp-libvips-linux-x64 @img-custom/sharp-linuxmusl-x64 @img-custom/sharp-linux-x64 --force && node scripts/sharp-copy-custom.js
+              npm install @img-custom/sharp-libvips-linux-arm64 @img-custom/sharp-libvips-linuxmusl-arm64 @img-custom/sharp-linux-arm64 @img-custom/sharp-linuxmusl-arm64 --force && node scripts/sharp-copy-custom.js
+            ext: deb
 
           - os: ubuntu-latest
             variant: linux-arm64
@@ -343,11 +359,13 @@ jobs:
           - [arm64.exe](${BASE_URL}/OpenComic-${VERSION}-win-arm64.exe)
 
           ###### Linux
+          - [.deb](${BASE_URL}/OpenComic-${VERSION}-linux-x64.deb)
           - [.flatpak](${BASE_URL}/OpenComic-${VERSION}-linux-x64.flatpak)
           - [.AppImage](${BASE_URL}/OpenComic-${VERSION}-linux-x64.AppImage)
           - [folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-linux-x64-folder-portable.7z)
 
           ###### Linux Arm64
+          - [.deb](${BASE_URL}/OpenComic-${VERSION}-linux-arm64.deb)
           - [arm64.AppImage](${BASE_URL}/OpenComic-${VERSION}-linux-arm64.AppImage)
           - [arm64.folder.portable.7z](${BASE_URL}/OpenComic-${VERSION}-linux-arm64-folder-portable.7z)
           EOF
