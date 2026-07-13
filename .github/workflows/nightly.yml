@@ -362,7 +362,7 @@ jobs:
 
           - [.dmg](${BASE_URL}/OpenComic-${VERSION}-mac-x64.dmg)
 
-          ##### macOS Arm64
+          ###### macOS Arm64
 
           - [arm64.dmg](${BASE_URL}/OpenComic-${VERSION}-mac-arm64.dmg)
 
