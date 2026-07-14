@@ -194,7 +194,7 @@ jobs:
           #     npm install @img-custom/sharp-libvips-linux-arm64 @img-custom/sharp-libvips-linuxmusl-arm64 @img-custom/sharp-linux-arm64 @img-custom/sharp-linuxmusl-arm64 --force && node scripts/sharp-copy-custom.js
           #   ext: flatpak
 
-          - os: macos-latest
+          - os: macos-26-intel
             variant: mac-x64
             build: npm run build-mac-dmg-nightly
             extraDeps: |
@@ -202,7 +202,7 @@ jobs:
               npm install @img-custom/sharp-darwin-arm64 @img-custom/sharp-libvips-darwin-arm64 --force && node scripts/sharp-copy-custom.js
             ext: dmg
 
-          - os: macos-latest
+          - os: macos-26
             variant: mac-arm64
             build: npm run build-mac-dmg-nightly-arm
             extraDeps: |
