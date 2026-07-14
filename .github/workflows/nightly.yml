@@ -360,10 +360,14 @@ jobs:
 
           ###### macOS
 
+          macOS nightly builds are unsigned. You may need to allow them in Security & Privacy. See: https://support.apple.com/guide/mac-help/mh40616/mac
+
           - [.dmg](${BASE_URL}/OpenComic-${VERSION}-mac-x64.dmg)
 
           ###### macOS Arm64
 
+          macOS nightly builds are unsigned. You may need to allow them in Security & Privacy. See: https://support.apple.com/guide/mac-help/mh40616/mac
+          
           - [arm64.dmg](${BASE_URL}/OpenComic-${VERSION}-mac-arm64.dmg)
 
           ###### Linux

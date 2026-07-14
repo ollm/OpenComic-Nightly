@@ -35,9 +35,13 @@ These builds are automatically generated from the latest commits and are intende
 
 ###### macOS
 
+macOS nightly builds are unsigned. You may need to allow them in Security & Privacy. See: https://support.apple.com/guide/mac-help/mh40616/mac
+
 - [.dmg](https://github.com/ollm/OpenComic-Nightly/releases/download/Nightly-v1.6.6-d47203a/OpenComic-Nightly-v1.6.6-d47203a-mac-x64.dmg)
 
 ###### macOS Arm64
+
+macOS nightly builds are unsigned. You may need to allow them in Security & Privacy. See: https://support.apple.com/guide/mac-help/mh40616/mac
 
 - [arm64.dmg](https://github.com/ollm/OpenComic-Nightly/releases/download/Nightly-v1.6.6-d47203a/OpenComic-Nightly-v1.6.6-d47203a-mac-arm64.dmg)
 
