@@ -332,13 +332,13 @@ jobs:
           tag_name: ${{ needs.prepare.outputs.tag }}
           name: OpenComic-${{ needs.prepare.outputs.tag }}
           body: |
-            ## Automated Nightly Build
+            ##### Automated Nightly Build
 
-            **Source Repository:** [ollm/OpenComic](https://github.com/ollm/OpenComic)
-            **Branch:** `master` 
-            **Commit:** https://github.com/ollm/OpenComic/commit/${{ needs.prepare.outputs.source_sha }}
+            Source Repository: [ollm/OpenComic](https://github.com/ollm/OpenComic)
+            Branch: `master` 
+            Commit: https://github.com/ollm/OpenComic/commit/${{ needs.prepare.outputs.source_sha }}
 
-            ### Changes Since Last Nightly:
+            ##### Changes Since Last Nightly:
             https://github.com/ollm/OpenComic/compare/${{ needs.prepare.outputs.last_sha }}...${{ needs.prepare.outputs.source_sha }}
           files: final/*
           prerelease: false
