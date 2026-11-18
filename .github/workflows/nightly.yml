@@ -232,6 +232,10 @@ jobs:
         run: npm install --force
         working-directory: source/build/node-zstd-native-dependencies
 
+      - name: Install Koffi native dependencies
+        run: npm install --force
+        working-directory: source/build/koffi-native-dependencies
+
       - name: Install deps
         working-directory: source
         # run: npm ci
@@ -244,6 +248,10 @@ jobs:
       - name: Copy zstd native modules
         working-directory: source
         run: node scripts/zstd-copy-native.js
+
+      - name: Copy Koffi native modules
+        working-directory: source
+        run: node scripts/koffi-copy-native.js
 
       - name: Install Flatpak tooling (Linux Flatpak builds only)
         if: startsWith(matrix.build, 'npm run build-flatpak')
